@@ -26,5 +26,21 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+
+userSchema.statics.findUserByCredintails = function (email, password) {
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error(console.log('ошибка')));
+      }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error('ошибка проверки ХЭШ'));
+          }
+          return user;
+        });
+    })
+}
 const User = mongoose.model('user', userSchema);
 module.exports = User;
