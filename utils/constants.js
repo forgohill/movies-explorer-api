@@ -27,6 +27,7 @@ const MESSAGE = {
   SUCCESSFUL_DATABASE_CONNECT: 'Соединение с базой данных установлено',
   SUCCESSFUL_REMOVE_OBJECT: 'Карточка фильма удалена',
   INFO_LISTENING_PORT: 'Порт на котором можно прослушать приложение:',
+  INFO_LIMITRATE: 'В настоящий момент превышено количество запросов на сервер. Повторите запрос позже'
 };
 
 const CONFIG = {

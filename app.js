@@ -12,7 +12,9 @@ const { MESSAGE, CONFIG } = require('./utils/constants')
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
-
+const cors = require('./middlewares/cors');
+const { reqLogger, errorLogger } = require('./middlewares/logger');
+const limiter = require('./middlewares/limiter');
 mongoose.connect(CONFIG.DATABASE_URI)
   .then(() => {
     console.log(MESSAGE.SUCCESSFUL_DATABASE_CONNECT);
@@ -21,16 +23,14 @@ mongoose.connect(CONFIG.DATABASE_URI)
     console.log(`${MESSAGE.ERROR_DATABASE_NOT_CONNECT} — ${error.message}`);
   });
 
+
+app.use(cors);
 app.use(helmet());
+app.use(limiter);
 
-// временное решение авторизации
-// app.use((req, res, next) => {
-//   req.user = { _id: '64d46f9cbf647d2715aba6a1' }; // тут _id одного из созданных пользователей
-//   // req.user = { _id: '64d68411a48745739a570511' }; // тут _id одного из созданных пользователей
-//   next();
-// });
-
+app.use(reqLogger);
 app.use(router);
+app.use(errorLogger);
 app.use(errors());
 app.use(require('./middlewares/errorGlobal'));
 
