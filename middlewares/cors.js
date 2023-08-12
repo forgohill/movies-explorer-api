@@ -1,11 +1,10 @@
 const ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const allowedCors = [
-  // 'http://marlo.students.nomoreparties.co',
-  // 'https://marlo.students.nomoreparties.co',
-  // 'http://api.marlo.students.nomoreparties.co',
-  // 'https://api.marlo.students.nomoreparties.co',
-  'http://51.250.68.134:3000',
+  'http://api.forgohill.diplom.nomoreparties.co',
+  'http://forgohill.diplom.nomoreparties.co',
+  'https://api.forgohill.diplom.nomoreparties.co',
+  'https://forgohill.diplom.nomoreparties.co',
   'http://localhost:3000',
   'https://localhost:3000',
 ];
