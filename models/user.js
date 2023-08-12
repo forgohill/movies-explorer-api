@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const { REGEX } = require('../utils/constants');
 const ErrorUnauthorized = require('../errors/ErrorUnauthorized');
-const { MESSAGE } = require('../utils/constants')
+const { MESSAGE } = require('../utils/constants');
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -30,19 +31,17 @@ const userSchema = new mongoose.Schema({
 userSchema.statics.findUserByCredintails = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
-      console.log('я в findUserByCredintails 1')
       if (!user) {
         return Promise.reject(new ErrorUnauthorized(MESSAGE.ERROR_LOGIN_VALIDATION));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
-          console.log('я в findUserByCredintails 2')
           if (!matched) {
             return Promise.reject(new ErrorUnauthorized(MESSAGE.ERROR_LOGIN_VALIDATION));
           }
           return user;
         });
-    })
-}
+    });
+};
 const User = mongoose.model('user', userSchema);
 module.exports = User;

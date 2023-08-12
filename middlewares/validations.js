@@ -7,9 +7,8 @@ const createUser = celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(6),
     name: Joi.string().required().min(2).max(30),
-  })
+  }),
 });
-
 
 const login = celebrate({
   body: Joi.object().keys({
