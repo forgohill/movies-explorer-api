@@ -5,6 +5,7 @@ const allowedCors = [
   // 'https://marlo.students.nomoreparties.co',
   // 'http://api.marlo.students.nomoreparties.co',
   // 'https://api.marlo.students.nomoreparties.co',
+  'http://51.250.68.134:3000/users',
   'http://localhost:3000',
   'https://localhost:3000',
 ];
