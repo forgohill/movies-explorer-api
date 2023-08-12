@@ -2,7 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { NODE_ENV, JWT_SECRET } = process.env;
-
+const { STATUS_CODE, MESSAGE } = require('../utils/constants');
+const ErrorBadRequest = require('../errors/ErrorBadRequest')
+const ErrorConflict = require('../errors/ErrorConflict')
 const createUser = (req, res, next) => {
   console.log('createUser');
   console.log(req.body);
@@ -17,16 +19,23 @@ const createUser = (req, res, next) => {
         .then((user) => {
           user = user.toObject();
           delete user.password;
-          return res.status(201).send(user);
+          return res.status(STATUS_CODE.SUCCESS_CREATE).send(user);
         })
         .catch((err) => {
-          res.status(400).send(err);
+          if (err.name === 'ValidationError') {
+            return next(new ErrorBadRequest(MESSAGE.ERROR_REGISTRATION))
+          }
+          if (err.code === 11000) {
+            return next(new ErrorConflict(MESSAGE.ERROR_NOT_UNIQUE_EMAIL))
+          }
+          return next(err);
         })
     })
 };
 
 const login = (req, res, next) => {
   console.log('login');
+  console.log(req.body);
   const { email, password } = req.body;
   return User.findUserByCredintails(email, password)
     .then((user) => {
@@ -41,9 +50,7 @@ const login = (req, res, next) => {
         sameSite: true,
       }).send({ _id: user._id });
     })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
+    .catch(next);
 };
 
 const logoutUser = (req, res, next) => {
@@ -51,14 +58,16 @@ const logoutUser = (req, res, next) => {
   try {
     res.clearCookie('jwt', { httpOnly: true }).send({ exit: 'user logged out' });
   } catch (err) {
-    res.status(400).send(err);
+    // res.status(400).send(err);
+    next(err);
   }
 };
 
 const getUser = (req, res, next) => {
+  console.log(req.user);
   User.findById(req.user._id).select('+email')
     .then((user) => { res.send(user); })
-    .catch((err) => { res.status(400).send(err); });
+    .catch((err) => { next(err) });
 };
 
 const updateUser = (req, res, next) => {
@@ -72,7 +81,10 @@ const updateUser = (req, res, next) => {
   )
     .then((user) => (res.send(user)))
     .catch((err) => {
-      res.status(400).send(err);
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        return next(new ErrorBadRequest(MESSAGE.ERROR_UPDATE_USER));
+      }
+      return next(err);
     })
 };
 

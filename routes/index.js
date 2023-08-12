@@ -24,21 +24,37 @@ POST /signup
 POST /signin
 */
 
-const router = require('express').Router();
-const { createUser, login, logoutUser, getUser, updateUser } = require('../controllers/users');
-const { createMovie, getMovies, deleteMovie } = require('../controllers/movies');
 
-router.post('/signup', createUser);
-router.post('/signin', login);
+const router = require('express').Router();
+const usersRouter = require('./users');
+const moviesRouter = require('./movies');
+const auth = require('../middlewares/auth');
+const {
+  createUser,
+  login,
+  logoutUser,
+} = require('../controllers/users');
+const ErrorNotFound = require('../errors/ErrorNotFound');
+const { MESSAGE } = require('../utils/constants')
+// const { createUser, login, logoutUser, getUser, updateUser } = require('../controllers/users');
+// const { createMovie, getMovies, deleteMovie } = require('../controllers/movies');
+const validation = require('../middlewares/validations');
+
+router.post('/signup', validation.createUser, createUser);
+router.post('/signin', validation.login, login);
 router.get('/signout', logoutUser);
 
-// auth
-router.get('/users/me', getUser);
-router.patch('/users/me', updateUser);
-router.get('/movies', getMovies);
-router.post('/movies', createMovie);
-router.delete('/movies/:movieId', deleteMovie);
+router.use(auth);
+router.use('/users', usersRouter);
+router.use('/movies', moviesRouter);
 
+// router.get('/users/me', getUser);
+// router.patch('/users/me', validation.updateUser, updateUser);
+// router.get('/movies', getMovies);
+// router.post('/movies', validation.createMovie, createMovie);
+// router.delete('/movies/:movieId', validation.checkMovieId, deleteMovie);
+
+router.use("*", (req, res, next) => next(new ErrorNotFound(MESSAGE.ERROR_PATH_NOT_FOUND)));
 // router.use('/users', usersRouter);
 // router.use('/movies', moviesRouter);
 
