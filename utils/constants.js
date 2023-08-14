@@ -1,7 +1,7 @@
-const REGEX = {
-  URL: /https?:\/\/(www)?[0-9a-zA-Z-._~:/?#\[\]@!\$&'\(\)\*\+,;=]+\.\w{2,3}/, //eslint-disable-line
-  EMAIL: /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u, //eslint-disable-line
-};
+const { config } = require('dotenv');
+
+const URL_REGEX = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]+\.[a-zA-Z0-9()]+\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/;
+const REGEX_EMAIL = /^((([0-9A-Za-z]{1}[-0-9A-z]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
 
 const STATUS_CODE = {
   SUCCESS_DONE: 200,
@@ -30,13 +30,25 @@ const MESSAGE = {
   INFO_LIMITRATE: 'В настоящий момент превышено количество запросов на сервер. Повторите запрос позже',
 };
 
-const CONFIG = {
-  DATABASE_URI: 'mongodb://127.0.0.1:27017/bitfilmsdb',
-};
+const {
+  DEV_SECRET = 'dev-secret',
+  JWT_SECRET,
+  NODE_ENV,
+  PORT = 3000,
+  DATABASE_URI = 'mongodb://127.0.0.1:27017/bitfilmsdb',
+} = process.env;
+
+if (NODE_ENV === 'production') { config(); }
+
+const SECRET_KEY = NODE_ENV === 'production' && JWT_SECRET ? JWT_SECRET : DEV_SECRET;
 
 module.exports = {
-  REGEX,
+  URL_REGEX,
+  REGEX_EMAIL,
   STATUS_CODE,
   MESSAGE,
-  CONFIG,
+  PORT,
+  SECRET_KEY,
+  NODE_ENV,
+  DATABASE_URI,
 };

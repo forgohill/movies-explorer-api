@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { REGEX } = require('../utils/constants');
+const { REGEX_EMAIL, MESSAGE } = require('../utils/constants');
 const ErrorUnauthorized = require('../errors/ErrorUnauthorized');
-const { MESSAGE } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -11,7 +10,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator(url) {
-        return REGEX.EMAIL.test(url);
+        return REGEX_EMAIL.test(url);
       },
     },
   },

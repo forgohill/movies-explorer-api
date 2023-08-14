@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,16 +6,14 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
-const { MESSAGE, CONFIG } = require('./utils/constants');
+const { MESSAGE, DATABASE_URI, PORT } = require('./utils/constants');
 const cors = require('./middlewares/cors');
 const { reqLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/limiter');
-require('dotenv').config();
 
-const { PORT = 3000 } = process.env;
 const app = express();
 
-mongoose.connect(CONFIG.DATABASE_URI)
+mongoose.connect(DATABASE_URI)
   .then(() => {
     console.log(MESSAGE.SUCCESSFUL_DATABASE_CONNECT);
   })

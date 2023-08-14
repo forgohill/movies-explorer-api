@@ -1,11 +1,12 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { STATUS_CODE, MESSAGE } = require('../utils/constants');
+const { STATUS_CODE, MESSAGE, SECRET_KEY } = require('../utils/constants');
 const ErrorBadRequest = require('../errors/ErrorBadRequest');
 const ErrorConflict = require('../errors/ErrorConflict');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+// const { NODE_ENV, JWT_SECRET } = process.env;
 
 const createUser = (req, res, next) => {
   const { email, name } = req.body;
@@ -33,12 +34,13 @@ const createUser = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
+  console.log(process.env);
   const { email, password } = req.body;
   return User.findUserByCredintails(email, password)
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        SECRET_KEY,
         { expiresIn: '7d' },
       );
       return res.cookie('jwt', token, {
@@ -54,7 +56,6 @@ const logoutUser = (req, res, next) => {
   try {
     res.clearCookie('jwt', { httpOnly: true }).send({ exit: 'user logged out' });
   } catch (err) {
-    // res.status(400).send(err);
     next(err);
   }
 };
