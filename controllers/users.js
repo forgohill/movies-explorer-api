@@ -78,6 +78,9 @@ const updateUser = (req, res, next) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         return next(new ErrorBadRequest(MESSAGE.ERROR_UPDATE_USER));
       }
+      if (err.code === 11000) {
+        return next(new ErrorConflict(MESSAGE.ERROR_NOT_UNIQUE_EMAIL));
+      }
       return next(err);
     });
 };
