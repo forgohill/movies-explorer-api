@@ -6,8 +6,6 @@ const { STATUS_CODE, MESSAGE, SECRET_KEY } = require('../utils/constants');
 const ErrorBadRequest = require('../errors/ErrorBadRequest');
 const ErrorConflict = require('../errors/ErrorConflict');
 
-// const { NODE_ENV, JWT_SECRET } = process.env;
-
 const createUser = (req, res, next) => {
   const { email, name } = req.body;
   bcrypt.hash(req.body.password, 10)
@@ -30,7 +28,8 @@ const createUser = (req, res, next) => {
           }
           return next(err);
         });
-    });
+    })
+    .catch((err) => { next(err); });
 };
 
 const login = (req, res, next) => {
