@@ -33,7 +33,6 @@ const createUser = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  console.log(process.env);
   const { email, password } = req.body;
   return User.findUserByCredintails(email, password)
     .then((user) => {
