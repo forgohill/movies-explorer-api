@@ -66,7 +66,7 @@ const deleteMovie = (req, res, next) => {
       if (movie.owner.equals(req.user._id)) {
         return movie.deleteOne()
           .then(() => {
-            res.send(MESSAGE.SUCCESSFUL_REMOVE_OBJECT);
+            res.send({ message: MESSAGE.SUCCESSFUL_REMOVE_OBJECT });
           })
           .catch((err) => {
             next(err);
