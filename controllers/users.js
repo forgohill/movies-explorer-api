@@ -6,8 +6,6 @@ const { STATUS_CODE, MESSAGE, SECRET_KEY } = require('../utils/constants');
 const ErrorBadRequest = require('../errors/ErrorBadRequest');
 const ErrorConflict = require('../errors/ErrorConflict');
 
-// const { NODE_ENV, JWT_SECRET } = process.env;
-
 const createUser = (req, res, next) => {
   const { email, name } = req.body;
   bcrypt.hash(req.body.password, 10)
@@ -30,11 +28,11 @@ const createUser = (req, res, next) => {
           }
           return next(err);
         });
-    });
+    })
+    .catch(next);
 };
 
 const login = (req, res, next) => {
-  console.log(process.env);
   const { email, password } = req.body;
   return User.findUserByCredintails(email, password)
     .then((user) => {
@@ -77,6 +75,9 @@ const updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         return next(new ErrorBadRequest(MESSAGE.ERROR_UPDATE_USER));
+      }
+      if (err.code === 11000) {
+        return next(new ErrorConflict(MESSAGE.ERROR_NOT_UNIQUE_EMAIL));
       }
       return next(err);
     });
