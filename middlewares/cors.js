@@ -7,6 +7,8 @@ const allowedCors = [
   'https://forgohill.diplom.nomoreparties.co',
   'http://localhost:3000',
   'https://localhost:3000',
+  'http://localhost:3001',
+  'https://localhost:3001',
 ];
 
 module.exports = (req, res, next) => {
