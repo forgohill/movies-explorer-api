@@ -27,7 +27,7 @@
 <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/javascript/javascript-plain.svg" style="width: 48px"/>
 <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/nodejs/nodejs-plain.svg" style="width: 48px"/>
 <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/mongodb/mongodb-original.svg" style="width: 48px"/>
-<img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/express/express-original.svg" style="width: 48px;background-color: white;"/>
+<img src="https://raw.githubusercontent.com/forgohill/forgohill/9f63934c5788242c27eab32d9d03b73d5515d9bf/src/img/tolls_icons/express-original.svg" style="width: 48px;background-color: white;"/>
 </div>
 
 ## 📊 Статус и планы по доработке проекта :
